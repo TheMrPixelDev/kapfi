@@ -1,7 +1,8 @@
 export interface Bartender {
     firstName: string;
     lastName: string;
-    telephone: string; //primary key
+    email: string; //primary key
+    password: string;
 }
 
 export interface Drink {

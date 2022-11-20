@@ -25,7 +25,8 @@ function createDatabaseStructure() {
     db.query(`CREATE TABLE IF NOT EXISTS bartender (
         firstName TEXT NOT NULL,
         lastName TEXT NOT NULL,
-        telephone TEXT NOT NULL PRIMARY KEY
+        password TEXT NOT NULL,
+        email TEXT NOT NULL PRIMARY KEY
     );`);
 
     db.query(`CREATE TABLE IF NOT EXISTS contains (
@@ -40,7 +41,7 @@ function createDatabaseStructure() {
         sellerNumber TEXT NOT NULL,
         drinkName TEXT NOT NULL,
         datetime INTEGER NOT NULL,
-        FOREIGN KEY (sellerNumber) REFERENCES bartender(telephone) ON DELETE CASCADE,
+        FOREIGN KEY (sellerNumber) REFERENCES bartender(email) ON DELETE CASCADE,
         FOREIGN KEY (drinkName) REFERENCES drink(name)
     );`);    
 
@@ -51,7 +52,7 @@ function createDatabaseStructure() {
  */
 
 export function addBartender(bartender: Bartender) {
-    db.query(`INSERT INTO bartender VALUES (?, ?, ?);`, [bartender.firstName, bartender.lastName, bartender.telephone])
+    db.query(`INSERT INTO bartender VALUES (?, ?, ?);`, [bartender.firstName, bartender.lastName, bartender.email])
 }
 
 export function addIngredient(ingredient: Ingredient) {
@@ -78,16 +79,16 @@ export function removeDrink(name: string) {
     db.query(`DELETE FROM drink WHERE name = ?;`, [name])
 }
 
-export function removeBartender(telephone: string) {
-    db.query(`DELETE FROM bartender WHERE telephone = ?;`, [telephone])
+export function removeBartender(email: string) {
+    db.query(`DELETE FROM bartender WHERE email = ?;`, [email])
 }
 
 export function removeIngredientFromDrink(drink: Drink, ingredient: Ingredient) {
     db.query(`DELETE FROM contains WHERE drinkName = ? AND ingredientName = ?;`, [drink.name, ingredient.type])
 }
 
-export function removeSells(telephone: string) {
-    db.query(`DELETE FROM sells WHERE sellerNumber = ?;`, [telephone])
+export function removeSells(email: string) {
+    db.query(`DELETE FROM sells WHERE sellerNumber = ?;`, [email])
 }
 
 /**
@@ -100,7 +101,11 @@ export function getDrinks() {
 }
 
 export function getBartenders() {
-    const bartenders: Array<Bartender> = db.queryEntries<{ firstName: string, lastName: string, telephone: string }>(`SELECT * FROM bartender;`);
+    let bartenders: Array<Bartender> = db.queryEntries<{ firstName: string, lastName: string, email: string, password: string }>(`SELECT * FROM bartender;`);
+    bartenders.map(b => {
+        b.password = "";
+        return b;
+    })
     return bartenders;
 }
 
@@ -120,8 +125,13 @@ export function getIngredientsOfDrink(drinkName: string) {
 }
 
 export function getSellsOfBartender(bartender: Bartender) {
-    const sells = db.queryEntries<{ sellerFirstName: string, sellerLastName: string, drinkName: string }>(`SELECT * FROM sells WHERE telephone = ?;`, [bartender.telephone])
+    const sells = db.queryEntries<{ sellerFirstName: string, sellerLastName: string, drinkName: string }>(`SELECT * FROM sells WHERE email = ?;`, [bartender.email])
     return sells;
+}
+
+export function getBartenderByEmail(searchedEmail: string) {
+    const bartender: Bartender = db.queryEntries<{ firstName: string, lastName: string, password: string, email: string }>(`SELECT * FROM bartender WHERE email = ?`, [searchedEmail])[0];
+    return bartender;
 }
 
 createDatabaseStructure();

@@ -19,8 +19,8 @@ export const getSells = ({ response }: { response: any }) => {
     response.body = model.getSells();
 }
 
-export const getSellsOfBartender = ({ params, response }: { params: { telephone: string }, response: any }) => {
-    response.body = model.getSellsOfBartender({ firstName: "", lastName: "", telephone: params.telephone });
+export const getSellsOfBartender = ({ params, response }: { params: { email: string }, response: any }) => {
+    response.body = model.getSellsOfBartender({ firstName: "", lastName: "", email: params.email, password: "" });
 }
 
 export const getIngredientsOfDrink = ({ params, response }: { params: { drinkName: string }, response: any }) => {
@@ -111,6 +111,11 @@ export const addSell = async ({ request, response }: { request: Request, respons
         sendResponse(response, "Something went wrong.", 500);
     }
     
+}
+
+export const handleLogin = ({ request, response }: { request: Request, response: Response}) => {
+    response.status = 200;
+    response.body = { message: "You are authorized." }
 }
 
 function sendResponse(response: Response, message: string, statusCode: number) {

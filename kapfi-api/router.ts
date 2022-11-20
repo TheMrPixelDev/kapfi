@@ -8,6 +8,7 @@ router.get('/bartenders', controller.getBartenders);
 router.get('/ingredients', controller.getIngredients);
 router.get('/ingredients/:drinkName', controller.getIngredientsOfDrink);
 router.get('/sells/all', controller.getSells);
+router.get('/login', controller.handleLogin)
 
 router.post('/addDrink', controller.addDrink);
 router.post('/addIngredientsToDrink', controller.addIngredientsToDrink);

@@ -3,5 +3,6 @@ export enum View {
     DRINKS,
     BAR,
     STOCK,
-    SALES
+    SALES,
+    LOGIN
 }

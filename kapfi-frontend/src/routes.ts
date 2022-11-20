@@ -3,6 +3,7 @@ import Sales from './lib/Salesview/Sales.svelte';
 import Stock from './lib/Stockview/Stock.svelte';
 import Staff from './lib/Staffview/Staff.svelte';
 import Drinks from './lib/Drinksview/Drinks.svelte';
+import Login from './lib/Loginview/Login.svelte';
 
 const routes =  {
     '/': Bar,
